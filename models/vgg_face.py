@@ -37,7 +37,7 @@ class VGG_16(nn.Module):
         self.fc7 = nn.Linear(4096, 4096)
         self.fc8 = nn.Linear(4096, 2622)
 
-    def load_weights(self, path="pretrained/VGG_FACE.t7"):
+    def load_weights(self, path="../pretrained/VGG_FACE.t7"):
         """ Function to load luatorch pretrained
 
         Args:
@@ -100,7 +100,7 @@ class VGG_16(nn.Module):
 if __name__ == "__main__":
     model = VGG_16().double()
     model.load_weights()
-    im = cv2.imread("images/ak.png")
+    im = cv2.imread("../images/ak.png")
     im = torch.Tensor(im).permute(2, 0, 1).view(1, 3, 224, 224).double()
     import numpy as np
 
@@ -108,4 +108,4 @@ if __name__ == "__main__":
     im -= torch.Tensor(np.array([129.1863, 104.7624, 93.5940])).double().view(1, 3, 1, 1)
     preds = F.softmax(model(im), dim=1)
     values, indices = preds.max(-1)
-    print(indices)
+    print(int(indices.cpu().numpy()[0]))
