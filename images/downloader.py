@@ -34,7 +34,7 @@ def get_all_iamge(filename):
         image_id = line_split[0]
         image_url = line_split[1]
         if False == os.path.exists('./vgg_face_dataset/images' + '/' + name):
-            os.mkdir('./vgg_face_dataset/images' + '/' + name)
+            os.makedirs('./vgg_face_dataset/images' + '/' + name)
         savefile = './vgg_face_dataset/images' + '/' + name + '/' + image_id + '.jpg'
         # The maxSize of Thread numberr:1000
         print(image_url, savefile)
