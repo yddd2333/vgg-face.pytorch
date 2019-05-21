@@ -1,14 +1,12 @@
 # coding: utf-8
 import cv2
 import dlib
-import sys
 import numpy as np
 import os
 
 
-
 def align_img(input_path, output_path):
-    predicter_path = './shape_predictor_5_face_landmarks.dat'
+    predicter_path = './shape_predictor_68_face_landmarks.dat'
     face_file_path = input_path  # 要使用的图片，图片放在当前文件夹中
 
     # 导入人脸检测模型
@@ -36,11 +34,7 @@ def align_img(input_path, output_path):
         faces.append(sp(rgb_img, det))
 
     # 人脸对齐
-    image = dlib.get_face_chips(rgb_img, faces, size=224)
-    if len(image)>1:
-        exit()
-    # 显示计数，按照这个计数创建窗口
-    image_cnt = 0
+    image = dlib.get_face_chips(rgb_img, faces, size=350)[0]
 
     # 显示对齐结果
     cv_rgb_image = np.array(image).astype(np.uint8)  # 先转换为numpy数组
@@ -51,8 +45,25 @@ def align_img(input_path, output_path):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+
 def align_folder(input_folder, output_folder):
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    img_list = os.listdir(input_folder)
+    for img in img_list:
+        img_path = input_folder + img
+        new_img_path = output_folder + img
+        align_img(img_path, new_img_path)
+
+
+def align_dataset(input_folder, output_folder):
+    folder_list = os.listdir(input_folder)
+    for folder in fodler_list:
+        folder_path = input_folder + folder + '/'
+
 
 
 if __name__ == '__main__':
-    align_img('/home/SENSETIME/dengyang/PycharmProjects/vgg-face.pytorch/func/images/1_screenshot_20.05.2019.png', './images/ag.jpg')
+    align_folder('/home/SENSETIME/dengyang/PycharmProjects/vgg-face.pytorch/func/Anton_Yelchin/350/',
+                 '/home/SENSETIME/dengyang/PycharmProjects/vgg-face.pytorch/func/Anton_Yelchin/resize/')
+
